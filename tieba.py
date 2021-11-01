@@ -22,7 +22,7 @@ tieba_url_base = "http://tieba.baidu.com"
 pgUrl_base="http://tieba.baidu.com/photo/g?kw="
 photo_url_base = "http://imgsrc.baidu.com/forum/pic/item/"
  
-BLOCK_SIZE = 4096
+BLOCK_SIZE = 1024*16
 threadLock = threading.Lock()
  
 # 打印信息到文件和屏幕
@@ -81,9 +81,9 @@ class MultiDownload(threading.Thread):
             try:
                 download_file(url,path)
                 self.dat.end_one(pos)
-            #出错标记为未下载
+            #出错标记为已下载
             except Exception as e:
-                self.dat.renew_one(pos)
+                self.dat.end_one(pos)
                 print(url,e)
                  
  
@@ -248,7 +248,7 @@ def read_root(url,name):
     except Exception as e:
         print(e)
         print(sys.exc_info())
-        logging.exception("logging...")
+        logging.exception("Something awful happened!")
     finally:
         tieba_info_fp.close()
      
